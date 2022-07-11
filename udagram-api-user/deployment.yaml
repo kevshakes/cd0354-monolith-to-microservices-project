@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udagram-api-user
+  labels:
+    app: udagram-api-user
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udagram-api-user
+  template:
+    metadata:
+      labels:
+        app: udagram-api-user
+    spec:
+      containers:
+      - name: udagram-api-user
+        image: kevintuei/udagram-api-user:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 250m
+        env:
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: POSTGRES_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: POSTGRES_PASSWORD
+        - name: DOCKER_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: DOCKER_USERNAME
+        - name: DOCKER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: DOCKER_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: POSTGRES_DB
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: POSTGRES_HOST
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_REGION
+        - name: AWS_PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_PROFILE
+        - name: AWS_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_BUCKET
+        - name: URL
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: URL
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: JWT_SECRET
+      restartPolicy: Always

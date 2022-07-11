@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: udagram-reverseproxy
+  labels:
+    app: udagram-reverseproxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: udagram-reverseproxy
+  template:
+    metadata:
+      labels:
+        app: udagram-reverseproxy
+    spec:
+      containers:
+      - name: udagram-reverseproxy
+        image: kevintuei/reverseproxy:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "100Mi"
+          limits:
+            memory: "200Mi"
+        args: ["--vm", "1", "--vm-bytes", "150M", "--vm-hang", "1"]
+        env:
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: POSTGRES_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: POSTGRES_PASSWORD
+        - name: DOCKER_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: DOCKER_USERNAME
+        - name: DOCKER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: DOCKER_PASSWORD
+        - name: POSTGRES_DB
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: POSTGRES_DB
+        - name: POSTGRES_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: POSTGRES_HOST
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_REGION
+        - name: AWS_PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_PROFILE
+        - name: AWS_BUCKET
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: AWS_BUCKET
+        - name: URL
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: URL
+        - name: JWT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              name: myconfigmap
+              key: JWT_SECRET
+      restartPolicy: Always
