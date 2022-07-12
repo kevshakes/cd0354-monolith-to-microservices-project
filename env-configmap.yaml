@@ -1,10 +1,10 @@
 apiVersion: v1 
 data:
   POSTGRES_DB: postgres
-  POSTGRES_HOST: db-519420772514-dev.cacncat1pcgg.ap-south-1.rds.amazonaws.com
+  POSTGRES_HOST: cdr.cht7neqgqphz.us-east-1.rds.amazonaws.com
   AWS_REGION: us-east-1
   AWS_PROFILE: default
-  AWS_BUCKET: arn:aws:s3:::test-519420772514-dev
+  AWS_BUCKET: arn:aws:s3:::test-421381417349-dev
   URL: "http://localhost:8100"
   JWT_SECRET: "testing"
 kind: ConfigMap 
